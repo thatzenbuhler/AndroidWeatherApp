@@ -8,6 +8,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.beust.klaxon.Klaxon
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             Response.Listener<String> { response ->
                 processData(response)
             },
-            Response.ErrorListener { temp.text = "Can't connect!" })
+            Response.ErrorListener { description.text = "Can't connect!" })
         queue.add(stringRequest)
     }
 
@@ -36,8 +37,8 @@ class MainActivity : AppCompatActivity() {
 
         // Update text fields to reflect data
         description.text = result.weather[0].description.capitalize()
-        temp.text = (((result.main.temp - 273.15) * 9/5) + 32).toString() + " °F"
+        temp.text = "%.1f".format((((result.main.temp - 273.15) * 9/5) + 32)) + " °F"
         humidity.text = result.main.humidity.toString() + "%"
-        wind.text = result.wind.deg.toString() + "° at " + result.wind.speed.toString() + " m/s"
+        wind.text = result.wind.deg.roundToInt().toString() + "° at " + result.wind.speed.toString() + " m/s"
     }
 }
